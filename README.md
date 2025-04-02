@@ -13,9 +13,8 @@ A personal portfolio website built with Three.js, showcasing projects and skills
 ## Tech Stack
 
 - Three.js
-- JavaScript/TypeScript
+- JavaScript
 - HTML5
-- CSS3
 
 ## Installation
 
@@ -61,7 +60,6 @@ My3dProfile/
 - The project uses Three.js for 3D rendering
 - Built with Vite for fast development
 - Supports hot module replacement
-
 
 ## License
 
