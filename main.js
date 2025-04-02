@@ -2,17 +2,18 @@ import * as THREE from 'three';
 
 // 創建場景
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff); // 純白色背景
+scene.background = new THREE.Color(0xfefae0); // 天
 
 // 創建相機
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 3);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 1, 8);  
 camera.lookAt(0, 0, 0);
 
 // 創建渲染器
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 // 創建射線檢測器
@@ -24,7 +25,7 @@ const planeConfigs = [
     {
         textureUrl: '/assets/mm.png',
         targetUrl: 'https://kuochunghsuan.com/',
-        position: { x: 0, y: 0, z: 0 }
+        position: { x: 0, y: 0, z: 1 }
     },
     {
         textureUrl: '/assets/forkVR.png',
@@ -39,7 +40,7 @@ const planeConfigs = [
     {
         textureUrl: '/assets/robotGame.png',
         targetUrl: 'https://kuochunghsuan.com/Adventurer',
-        position: { x: -10, y: 0.5, z: -6 }
+        position: { x: -7, y: 0.3, z: -1 }
     }
 ];
 
@@ -58,13 +59,19 @@ planeConfigs.forEach((config, i) => {
     const material = new THREE.MeshStandardMaterial({
         map: texture,
         side: THREE.DoubleSide,
-        color: 0xffffff
+        color: 0xffffff,
+        roughness: 0.5,
+        metalness: 0.5
     });
 
     const plane = new THREE.Mesh(circleGeometry, material);
     plane.position.set(config.position.x, config.position.y, config.position.z);
     plane.rotation.x = Math.random() * 0.2 - 0.1;
     plane.rotation.y = Math.random() * 0.2 - 0.1;
+    
+    // 啟用陰影
+    plane.castShadow = true;
+    plane.receiveShadow = true;
     
     // 存儲URL信息
     plane.userData.targetUrl = config.targetUrl;
@@ -82,31 +89,49 @@ planeConfigs.forEach((config, i) => {
 });
 
 // 添加攝影棚燈光效果
-const mainLight = new THREE.DirectionalLight(0xffffff, 1.5);
+const mainLight = new THREE.DirectionalLight(0xffffff, 2);
 mainLight.position.set(0, 2, 2);
+mainLight.castShadow = true;
+mainLight.shadow.mapSize.width = 2048;
+mainLight.shadow.mapSize.height = 2048;
+mainLight.shadow.camera.near = 0.5;
+mainLight.shadow.camera.far = 100;
+mainLight.shadow.camera.left = -10;
+mainLight.shadow.camera.right = 10;
+mainLight.shadow.camera.top = 10;
+mainLight.shadow.camera.bottom = -10;
+mainLight.shadow.bias = -0.0001;
+mainLight.shadow.normalBias = 0.02;
 scene.add(mainLight);
 
 const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
 fillLight.position.set(-2, 1, -2);
+fillLight.castShadow = true;
+fillLight.shadow.mapSize.width = 1024;
+fillLight.shadow.mapSize.height = 1024;
+fillLight.shadow.bias = -0.0001;
+fillLight.shadow.normalBias = 0.02;
 scene.add(fillLight);
 
-const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
-backLight.position.set(2, 1, -2);
-scene.add(backLight);
+// const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
+// backLight.position.set(2, 1, -2);
+// backLight.castShadow = true;
+// scene.add(backLight);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
 scene.add(ambientLight);
 
 // 添加地面反射
 const groundGeometry = new THREE.PlaneGeometry(100, 100);
 const groundMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    roughness: 0.8,
-    metalness: 0.2
+    color: 0xe9edc9,  // 稍微灰一点的白色
+    roughness: 0.9,
+    metalness: 0.1
 });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -Math.PI / 2;
 ground.position.y = -2;
+ground.receiveShadow = true;
 scene.add(ground);
 
 // 滑鼠移動檢測hover效果
