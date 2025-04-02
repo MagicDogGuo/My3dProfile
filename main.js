@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 // 創建場景
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87CEEB); // 天空藍色背景
+scene.background = new THREE.Color(0xffffff); // 純白色背景
 
 // 創建相機
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -81,24 +81,33 @@ planeConfigs.forEach((config, i) => {
     });
 });
 
-// 添加燈光效果
-const frontLight = new THREE.DirectionalLight(0xffffff, 1);
-frontLight.position.set(0, 0, 2);
-scene.add(frontLight);
+// 添加攝影棚燈光效果
+const mainLight = new THREE.DirectionalLight(0xffffff, 1.5);
+mainLight.position.set(0, 2, 2);
+scene.add(mainLight);
 
-const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
-backLight.position.set(0, 0, -2);
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+fillLight.position.set(-2, 1, -2);
+scene.add(fillLight);
+
+const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
+backLight.position.set(2, 1, -2);
 scene.add(backLight);
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-// 添加背景建築
-// const buildingTexture = new THREE.TextureLoader().load('/assets/skybox.webp', (texture) => {
-//     const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-//     rt.fromEquirectangularTexture(renderer, texture);
-//     scene.background = rt.texture;
-// });
+// 添加地面反射
+const groundGeometry = new THREE.PlaneGeometry(100, 100);
+const groundMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 0.8,
+    metalness: 0.2
+});
+const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -2;
+scene.add(ground);
 
 // 滑鼠移動檢測hover效果
 document.addEventListener('mousemove', (event) => {
