@@ -3,7 +3,7 @@ services:
     name: sam-profile
     env: static
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
+    staticPublishPath: dist
     envVars:
       - key: NODE_VERSION
         value: 18.0.0 
