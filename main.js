@@ -23,24 +23,24 @@ const mouse = new THREE.Vector2();
 // 定義每個平面的配置
 const planeConfigs = [
     {
-        textureUrl: '/assets/mm.png',
+        textureUrl: './assets/mm.png',
         targetUrl: 'https://kuochunghsuan.com/',
-        position: { x: 0, y: 0, z: 1 }
+        position: { x: 0, y: 0, z: 0 }
     },
     {
-        textureUrl: '/assets/forkVR.png',
+        textureUrl: './assets/forkVR.png',
         targetUrl: 'https://kuochunghsuan.com/Forklife-License-VR-Training-S-curve',
         position: { x: 5, y: 0.3, z: -2 }
     },
     {
-        textureUrl: '/assets/ARHealth.png',
+        textureUrl: './assets/ARHealth.png',
         targetUrl: 'https://kuochunghsuan.com/GoodFace-A-Digital-Facial-Palsy-Patient-Care-Application',
         position: { x: -5, y: -0.3, z: -4 }
     },
     {
-        textureUrl: '/assets/robotGame.png',
+        textureUrl: './assets/robotGame.png',
         targetUrl: 'https://kuochunghsuan.com/Adventurer',
-        position: { x: -7, y: 0.3, z: -1 }
+        position: { x: -10, y: 0.5, z: -6 }
     }
 ];
 
